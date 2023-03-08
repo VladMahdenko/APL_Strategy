@@ -1,45 +1,49 @@
-class Reporter
-  attr_accessor :parser
+#клас-контекст, який використовує конкретні стратегії та визначає інтерфейс для клієнтів
+class Context
+  attr_accessor :formatter
 
-  def initialize(parser)
-    @parser = parser
+  def initialize(formatter)
+    @formatter = formatter
   end
 
-  def report(data)
-    parser.parse(data)
+  def format(data)
+    formatter.format(data)
   end
 end
 
-module Parser
-  def parse(data)
+#інтерфейс для використовуваних алгоритмів
+module Formatter
+  def format(data)
     raise NotImplementedError
   end
 end
 
-class JSONParser
-  include(Parser)
+#конкретна стратегія
+class JSONFormatter
+  include(Formatter)
 
-  def parse(data)
-    puts "Parsing #{data} as JSON..."
+  def format(data)
+    puts "Formatting #{data} as JSON..."
   end
 end
 
-class TXTParser
-  include(Parser)
+#конкретна стратегія
+class StringFormatter
+  include(Formatter)
 
-  def parse(data)
-    puts "Parsing #{data} as TXT..."
+  def format(data)
+    puts "Formatting #{data} as String..."
   end
 end
 
-class PDFParser
-  include(Parser)
+#конкретна стратегія
+class XMLFormatter
+  include(Formatter)
 
-  def parse(data)
-    puts "Parsing #{data} as PDF..."
+  def format(data)
+    puts "Formatting #{data} as XML..."
   end
 end
 
-reporter = Reporter.new(PDFParser.new)
-data = 123
-reporter.report(data)
+context = Context.new(XMLFormatter.new)
+context.format(12)
